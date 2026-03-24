@@ -1,0 +1,55 @@
+<mujoco>
+    <compiler angle="radian" meshdir="meshes" autolimits="true" />
+    <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast" density="1.225" viscosity="1.8e-5" />
+    <asset>
+        <mesh name="tetrahedron" vertex="0 0 0 1 0 0 0 1 0 0 0 1" />
+        <texture type="skybox" builtin="gradient" rgb1=".1 .1 .1" rgb2=".9 .9 .9" width="512" height="512"/>
+        <texture name="plane" type="2d" builtin="checker" rgb1=".1 .1 .1" rgb2=".9 .9 .9"
+            width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
+        <material name="plane" reflectance="0.3" texture="plane" texrepeat="1 1" texuniform="true" />
+    </asset>
+
+    <worldbody>
+        <geom type="plane" material="plane" pos="0 0 0" size="0 0 .25"/>
+        <light directional="true" dir="0 0 -1" diffuse="1 1 1" specular=".5 .5 .5"/>
+        
+        
+        <!-- <body> -->
+    
+            <body name="l1" pos="0 0 .8">
+                <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0"/>
+                <joint type="hinge" name="joint_l1" pos="0 0 0" axis="0 1 0"/>
+                <site type="sphere" name="l1" size=".001" pos="0 0.006 0" rgba="1 0 0 1"/>
+                
+                <body name="l2" pos="0.098 0.012 0">
+                    <joint type="hinge" name="joint_l2" pos="0 0 0" axis="0 1 0"/>
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 -0.06573" rgba="1 1 1 .8" />
+                    <!-- <site type="sphere" name="l5" size=".01" pos="0 0 0" rgba="0 0 1 1"/> -->
+
+                    <body name="l3" pos="-0.098 -0.012 -0.06573">
+                    <joint type="hinge" name="joint_l3" pos="0 0 0" axis="0 1 0"/>
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 0.06573" rgba="1 1 1 .8" />
+                    <!-- <site type="sphere" name="l5" size=".01" pos="0 0 0" rgba="0 0 1 1"/> -->
+
+                    <body name="l4" pos="-0.098 0.012 0.06573">
+                    <joint type="hinge" name="joint_l4" pos="0 0 0" axis="0 1 0"/>
+                    <geom type="box" size="0.005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" />
+                    <site type="sphere" name="l4" size=".001" pos="0.098 -0.006 0" rgba="1 1 1 1"/>
+
+                    
+                    </body>
+                    </body>
+                    </body>
+            </body>
+             
+            
+        <!-- </body> -->
+        
+
+    </worldbody>
+
+    <equality>
+        <connect site1="l1" site2="l4"/>
+    </equality>
+
+</mujoco>
