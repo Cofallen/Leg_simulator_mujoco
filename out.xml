@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco>
+    <compiler angle="radian" meshdir="meshes" autolimits="true" />
+    <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast" density="1.225" viscosity="1.8e-5" />
+    <asset>
+        <mesh name="tetrahedron" vertex="0 0 0 1 0 0 0 1 0 0 0 1" />
+        <texture type="skybox" builtin="gradient" rgb1=".1 .1 .1" rgb2=".9 .9 .9" width="512" height="512" />
+        <texture name="plane" type="2d" builtin="checker" rgb1=".1 .1 .1" rgb2=".9 .9 .9" width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
+        <material name="plane" reflectance="0.3" texture="plane" texrepeat="1 1" texuniform="true" />
+    </asset>
+
+    <default>
+         
+    </default>
+    
+    <worldbody>
+        <geom type="plane" material="plane" pos="0 0 0" size="0 0 .25" />
+        <light directional="true" dir="0 0 -1" diffuse="1 1 1" specular=".5 .5 .5" />
+        
+        
+        <body>
+        
+
+
+        <body name="body" pos="0 0 .8">
+            <geom type="box" size="0.13 0.13 0.05" mass="10.0" />
+        </body>
+
+        <body name="left" pos="0 -0.15 .8">
+            
+            <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0" />
+            <body name="l1_L" pos="0 0 0">
+                <geom type="box" size="0.04900000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="0.04900000 0.00000000 0.00000000" quat="1.00000000 0.00000000 0.00000000 0.00000000" />
+                <joint type="hinge" name="joint_l1_L" pos="0 0 0" axis="0 1 0" />
+                <site type="sphere" name="l1_L" size=".005" pos="0 0 0" rgba="1 0 0 1" />
+                
+                <body name="l2_L" pos="0.098 0.012 0">
+                    <joint type="hinge" name="joint_l2_L" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.05900092 0.00500000 0.00500000" rgba="1 1 1 .8" pos="-0.04900000 0.00000000 -0.03286500" quat="-0.00000000 0.95668583 0.00000000 0.29112234" />
+
+                    <body name="l3_L" pos="-0.098 -0.012 -0.06573">
+                    <joint type="hinge" name="joint_l3_L" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.09100031 0.00500000 0.00500000" rgba="1 1 1 .8" pos="-0.07557500 0.00000000 0.05069000" quat="0.00000000 -0.95668481 0.00000000 0.29112569" />
+                    <site type="sphere" name="l3_L" size=".005" pos="-0.098 0 0.06573" rgba="0 0 1 1" />
+
+                    <body name="l4_L" pos="-0.15115 0.012 0.10138">
+                    <joint type="hinge" name="joint_l4_L" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.05850000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="-0.05850000 0.00000000 0.00000000" quat="0.00000000 0.00000000 1.00000000 0.00000000" />
+
+                    <body name="l5_L" pos="-0.117 -0.012 0">
+                    <joint type="hinge" name="joint_l5_L" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.16099959 0.00500000 0.00500000" rgba="0 1 0 .8" pos="0.13371000 0.00000000 -0.08968000" quat="-0.00000000 0.29111936 0.00000000 0.95668674" />
+                    <site type="sphere" name="l5_L" size=".005" pos="0.05315 0 -0.03565" rgba="1 1 1 1" />
+                    
+                    <body name="wheel_L" pos="0.26742 0.01 -0.17936">
+                        <geom type="cylinder" size="0.05 0.005" mass="00.5" euler="1.57 0 0" />
+                        <joint type="hinge" name="joint_wheel_L" pos="0 0 0" axis="0 1 0" />
+                    </body>
+
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+            </body>
+             
+            <body name="l6" pos="0 0.012 0">
+              <joint type="hinge" name="joint_l6_L" pos="0 0 0" axis="0 1 0" />
+              
+              <geom type="box" size="0.10750000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="-0.10750000 0.00000000 0.00000000" quat="0.00000000 0.00000000 1.00000000 0.00000000" />
+              <site type="sphere" name="l6r_L" size=".005" pos="0 0 0" rgba="1 1 1 1" />
+              <site type="sphere" name="l6m_L" size=".005" pos="-0.098 0 0" rgba="0 0 0 1" />
+              <site type="sphere" name="l6l_L" size=".005" pos="-0.215 0 0" rgba="0 0 0 1" />
+            </body>
+            
+        </body>
+        
+
+
+        <body name="right" pos="0 0.15 .8">
+            
+            <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0" />
+            <body name="l1_R" pos="0 0 0">
+                <geom type="box" size="0.04900000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="0.04900000 0.00000000 0.00000000" quat="1.00000000 0.00000000 0.00000000 0.00000000" />
+                <joint type="hinge" name="joint_l1_R" pos="0 0 0" axis="0 1 0" />
+                <site type="sphere" name="l1_R" size=".005" pos="0 0 0" rgba="1 0 0 1" />
+                
+                <body name="l2_R" pos="0.098 0.012 0">
+                    <joint type="hinge" name="joint_l2_R" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.05900092 0.00500000 0.00500000" rgba="1 1 1 .8" pos="-0.04900000 0.00000000 -0.03286500" quat="-0.00000000 0.95668583 0.00000000 0.29112234" />
+
+                    <body name="l3_R" pos="-0.098 -0.012 -0.06573">
+                    <joint type="hinge" name="joint_l3_R" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.09100031 0.00500000 0.00500000" rgba="1 1 1 .8" pos="-0.07557500 0.00000000 0.05069000" quat="0.00000000 -0.95668481 0.00000000 0.29112569" />
+                    <site type="sphere" name="l3_R" size=".005" pos="-0.098 0 0.06573" rgba="0 0 1 1" />
+
+                    <body name="l4_R" pos="-0.15115 0.012 0.10138">
+                    <joint type="hinge" name="joint_l4_R" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.05850000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="-0.05850000 0.00000000 0.00000000" quat="0.00000000 0.00000000 1.00000000 0.00000000" />
+
+                    <body name="l5_R" pos="-0.117 -0.012 0">
+                    <joint type="hinge" name="joint_l5_R" pos="0 0 0" axis="0 1 0" />
+                    <geom type="box" size="0.16099959 0.00500000 0.00500000" rgba="0 1 0 .8" pos="0.13371000 0.00000000 -0.08968000" quat="-0.00000000 0.29111936 0.00000000 0.95668674" />
+                    <site type="sphere" name="l5_R" size=".005" pos="0.05315 0 -0.03565" rgba="1 1 1 1" />
+                    
+                    <body name="wheel_R" pos="0.26742 -0.01 -0.17936">
+                        <geom type="cylinder" size="0.05 0.005" mass="00.5" euler="1.57 0 0" />
+                        <joint type="hinge" name="joint_wheel_R" pos="0 0 0" axis="0 -1 0" />
+                    </body>
+
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+            </body>
+             
+            <body name="l6_R" pos="0 0.012 0">
+              <joint type="hinge" name="joint_l6_R" pos="0 0 0" axis="0 1 0" />
+              
+              <geom type="box" size="0.10750000 0.00500000 0.00500000" rgba="0 1 0 .8" pos="-0.10750000 0.00000000 0.00000000" quat="0.00000000 0.00000000 1.00000000 0.00000000" />
+              <site type="sphere" name="l6r_R" size=".005" pos="0 0 0" rgba="1 1 1 1" />
+              <site type="sphere" name="l6m_R" size=".005" pos="-0.098 0 0" rgba="0 0 0 1" />
+              <site type="sphere" name="l6l_R" size=".005" pos="-0.215 0 0" rgba="0 0 0 1" />
+            </body>
+            
+        </body>
+
+        </body>
+
+
+    </worldbody>
+
+    <equality>
+        
+         
+         <connect site1="l3_L" site2="l6m_L" solref="0.002 1" />
+         <connect site1="l5_L" site2="l6l_L" solref="0.002 1" />
+         <connect site1="l3_R" site2="l6m_R" solref="0.002 1" />
+         <connect site1="l5_R" site2="l6l_R" solref="0.002 1" />
+    </equality>
+
+    <actuator>
+        <position kp="2" kv=".1" name="left_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_L" />
+        <position kp="2" kv=".1" name="left_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_L" />
+        <position kp="2" kv=".1" name="left_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_L" />
+        <position kp="2" kv=".1" name="right_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_R" />
+        <position kp="2" kv=".1" name="right_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_R" />
+        <position kp="2" kv=".1" name="right_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_R" />
+    </actuator>
+</mujoco>
