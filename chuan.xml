@@ -17,42 +17,42 @@
         <light directional="true" dir="0 0 -1" diffuse="1 1 1" specular=".5 .5 .5"/>
         
         
-        <body>
+        <body name="body" pos="0 0 .8">
         <!-- <freejoint/> -->
 
 
-        <body name="body" pos="0 0 .8">
+        <body name="box" pos="0 0 0">
             <geom type="box" size="0.13 0.13 0.05" mass="10.0"/>
         </body>
 
-        <body name="left" pos="0 -0.15 .8">
+        <body name="left" pos="0 -0.15 0">
             <!-- <freejoint/> -->
             <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0"/>
             <body name="l1_L" pos="0 0 0">
-                <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0"/>
+                <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0" mass="0.1459"/>
                 <joint type="hinge" name="joint_l1_L" pos="0 0 0" axis="0 1 0"/>
                 <site type="sphere" name="l1_L" size=".005" pos="0 0 0" rgba="1 0 0 1"/>
                 
                 <body name="l2_L" pos="0.098 0.012 0">
                     <joint type="hinge" name="joint_l2_L" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 -0.06573" rgba="1 1 1 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 -0.06573" rgba="1 1 1 .8" mass="0.098"/>
 
                     <body name="l3_L" pos="-0.098 -0.012 -0.06573">
                     <joint type="hinge" name="joint_l3_L" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.15115 0 0.10138" rgba="1 1 1 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.15115 0 0.10138" rgba="1 1 1 .8" mass="0.0696"/>
                     <site type="sphere" name="l3_L" size=".005" pos="-0.098 0 0.06573" rgba="0 0 1 1"/>
 
                     <body name="l4_L" pos="-0.15115 0.012 0.10138">
                     <joint type="hinge" name="joint_l4_L" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.117 0 0" rgba="0 1 0 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.117 0 0" rgba="0 1 0 .8" mass="0.0600"/>
 
                     <body name="l5_L" pos="-0.117 -0.012 0">
                     <joint type="hinge" name="joint_l5_L" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 0.26742 0 -0.17936" rgba="0 1 0 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 0.26742 0 -0.17936" rgba="0 1 0 .8" mass="0.2974"/>
                     <site type="sphere" name="l5_L" size=".005" pos="0.05315 0 -0.03565" rgba="1 1 1 1"/>
                     
                     <body name="wheel_L" pos="0.26742 0.01 -0.17936">
-                        <geom type="cylinder" size="0.05 0.005" mass="00.5" euler="1.57 0 0"/>
+                        <geom type="cylinder" size="0.05 0.005" mass="0.5" euler="1.57 0 0"/>
                         <joint type="hinge" name="joint_wheel_L" pos="0 0 0" axis="0 1 0"/>
                     </body>
 
@@ -65,7 +65,7 @@
             <body name="l6" pos="0 0.012 0">
               <joint type="hinge" name="joint_l6_L" pos="0 0 0" axis="0 1 0"/>
               <!-- <joint type="hinge" name="joint_l6m" pos="-0.098 0 0" axis="0 1 0"/> -->
-              <geom type="box" size="0.005" fromto="0 0 0 -0.215 0 0" rgba="0 1 0 .8" />
+              <geom type="box" size="0.005" fromto="0 0 0 -0.215 0 0" rgba="0 1 0 .8" mass="0.3093"/>
               <site type="sphere" name="l6r_L" size=".005" pos="0 0 0" rgba="1 1 1 1"/>
               <site type="sphere" name="l6m_L" size=".005" pos="-0.098 0 0" rgba="0 0 0 1"/>
               <site type="sphere" name="l6l_L" size=".005" pos="-0.215 0 0" rgba="0 0 0 1"/>
@@ -75,34 +75,34 @@
         
 
 
-        <body name="right" pos="0 0.15 .8">
+        <body name="right" pos="0 0.15 0">
             <!-- <freejoint/> -->
             <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0"/>
             <body name="l1_R" pos="0 0 0">
-                <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0"/>
+                <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0" mass="0.1459"/>
                 <joint type="hinge" name="joint_l1_R" pos="0 0 0" axis="0 1 0"/>
                 <site type="sphere" name="l1_R" size=".005" pos="0 0 0" rgba="1 0 0 1"/>
                 
                 <body name="l2_R" pos="0.098 0.012 0">
                     <joint type="hinge" name="joint_l2_R" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 -0.06573" rgba="1 1 1 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.098 0 -0.06573" rgba="1 1 1 .8" mass="0.098"/>
 
                     <body name="l3_R" pos="-0.098 -0.012 -0.06573">
                     <joint type="hinge" name="joint_l3_R" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.15115 0 0.10138" rgba="1 1 1 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.15115 0 0.10138" rgba="1 1 1 .8" mass="0.0696"/>
                     <site type="sphere" name="l3_R" size=".005" pos="-0.098 0 0.06573" rgba="0 0 1 1"/>
 
                     <body name="l4_R" pos="-0.15115 0.012 0.10138">
                     <joint type="hinge" name="joint_l4_R" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 -0.117 0 0" rgba="0 1 0 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 -0.117 0 0" rgba="0 1 0 .8" mass="0.0600"/>
 
                     <body name="l5_R" pos="-0.117 -0.012 0">
                     <joint type="hinge" name="joint_l5_R" pos="0 0 0" axis="0 1 0"/>
-                    <geom type="box" size="0.005" fromto="0 0 0 0.26742 0 -0.17936" rgba="0 1 0 .8" />
+                    <geom type="box" size="0.005" fromto="0 0 0 0.26742 0 -0.17936" rgba="0 1 0 .8" mass="0.2974"/>
                     <site type="sphere" name="l5_R" size=".005" pos="0.05315 0 -0.03565" rgba="1 1 1 1"/>
                     
                     <body name="wheel_R" pos="0.26742 -0.01 -0.17936">
-                        <geom type="cylinder" size="0.05 0.005" mass="00.5" euler="1.57 0 0"/>
+                        <geom type="cylinder" size="0.05 0.005" mass="0.5" euler="1.57 0 0"/>
                         <joint type="hinge" name="joint_wheel_R" pos="0 0 0" axis="0 -1 0"/>
                     </body>
 
@@ -115,7 +115,7 @@
             <body name="l6_R" pos="0 0.012 0">
               <joint type="hinge" name="joint_l6_R" pos="0 0 0" axis="0 1 0"/>
               <!-- <joint type="hinge" name="joint_l6m" pos="-0.098 0 0" axis="0 1 0"/> -->
-              <geom type="box" size="0.005" fromto="0 0 0 -0.215 0 0" rgba="0 1 0 .8" />
+              <geom type="box" size="0.005" fromto="0 0 0 -0.215 0 0" rgba="0 1 0 .8" mass="0.3093"/>
               <site type="sphere" name="l6r_R" size=".005" pos="0 0 0" rgba="1 1 1 1"/>
               <site type="sphere" name="l6m_R" size=".005" pos="-0.098 0 0" rgba="0 0 0 1"/>
               <site type="sphere" name="l6l_R" size=".005" pos="-0.215 0 0" rgba="0 0 0 1"/>
