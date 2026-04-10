@@ -18,14 +18,15 @@
         
         
         <body name="body" pos="0 0 .8">
-        <!-- <freejoint/> -->
+        <freejoint/>
 
 
         <body name="box" pos="0 0 0">
             <geom type="box" size="0.13 0.13 0.05" mass="10.0"/>
+            <site type="box" name="imu" size=".01" rgba="1 0 0 1"/>
         </body>
 
-        <body name="left" pos="0 -0.15 0">
+        <body name="left" pos="0 0.15 0">
             <!-- <freejoint/> -->
             <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0"/>
             <body name="l1_L" pos="0 0 0">
@@ -75,12 +76,12 @@
         
 
 
-        <body name="right" pos="0 0.15 0">
+        <body name="right" pos="0 -0.15 0">
             <!-- <freejoint/> -->
             <geom type="sphere" size="0.001" mass="0.001" rgba="0 0 0 0"/>
             <body name="l1_R" pos="0 0 0">
                 <geom type="box" size=".005" fromto="0 0 0 0.098 0 0" rgba="0 1 0 .8" pos="0 0 0" mass="0.1459"/>
-                <joint type="hinge" name="joint_l1_R" pos="0 0 0" axis="0 1 0"/>
+                <joint type="hinge" name="joint_l1_R" pos="0 0 0" axis="0 -1 0"/>
                 <site type="sphere" name="l1_R" size=".005" pos="0 0 0" rgba="1 0 0 1"/>
                 
                 <body name="l2_R" pos="0.098 0.012 0">
@@ -113,7 +114,7 @@
             </body>
              
             <body name="l6_R" pos="0 0.012 0">
-              <joint type="hinge" name="joint_l6_R" pos="0 0 0" axis="0 1 0"/>
+              <joint type="hinge" name="joint_l6_R" pos="0 0 0" axis="0 -1 0"/>
               <!-- <joint type="hinge" name="joint_l6m" pos="-0.098 0 0" axis="0 1 0"/> -->
               <geom type="box" size="0.005" fromto="0 0 0 -0.215 0 0" rgba="0 1 0 .8" mass="0.3093"/>
               <site type="sphere" name="l6r_R" size=".005" pos="0 0 0" rgba="1 1 1 1"/>
@@ -145,4 +146,17 @@
         <position kp="2" kv=".1" name="right_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_R"/>
         <position kp="2" kv=".1" name="right_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_R"/>
     </actuator>
+
+    <sensor>
+        <framequat name="orientation" objtype="site" objname="imu"/>
+        <accelerometer name="acc" site="imu"/>
+        <gyro name="gyro" site="imu"/>
+
+        <jointpos name="joint_l1_L" joint="joint_l1_L"/>
+        <jointpos name="joint_l6_L" joint="joint_l6_L"/>
+        <jointpos name="joint_wheel_L" joint="joint_wheel_L"/>
+        <jointpos name="joint_l1_R" joint="joint_l1_R"/>
+        <jointpos name="joint_l6_R" joint="joint_l6_R"/>
+        <jointpos name="joint_wheel_R" joint="joint_wheel_R"/>
+    </sensor>
 </mujoco>
