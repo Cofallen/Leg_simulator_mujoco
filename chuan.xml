@@ -9,7 +9,7 @@
     </asset>
 
     <default>
-         <!-- <joint damping="1"/> -->
+         <joint damping="0.01"/>
     </default>
     
     <worldbody>
@@ -17,7 +17,7 @@
         <light directional="true" dir="0 0 -1" diffuse="1 1 1" specular=".5 .5 .5"/>
         
         
-        <body name="body" pos="0 0 .8">
+        <body name="body" pos="0 0 .3">
         <freejoint/>
 
 
@@ -139,12 +139,12 @@
     </equality>
 
     <actuator>
-        <position kp="2" kv=".1" name="left_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_L"/>
-        <position kp="2" kv=".1" name="left_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_L"/>
-        <position kp="2" kv=".1" name="left_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_L"/>
-        <position kp="2" kv=".1" name="right_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_R"/>
-        <position kp="2" kv=".1" name="right_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_R"/>
-        <position kp="2" kv=".1" name="right_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_R"/>
+        <motor name="left_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_L"/>
+        <motor name="left_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_L"/>
+        <motor name="left_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_L"/>
+        <motor name="right_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_R"/>
+        <motor name="right_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_R"/>
+        <motor name="right_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_R"/>
     </actuator>
 
     <sensor>

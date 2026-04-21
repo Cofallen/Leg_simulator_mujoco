@@ -1,0 +1,4 @@
+mujoco
+# optional fallback
+mujoco-py
+numpy
