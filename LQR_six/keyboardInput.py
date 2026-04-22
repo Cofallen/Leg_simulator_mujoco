@@ -27,14 +27,14 @@ class KeyboardInput:
         try:
             with self.lock:
                 # ---- 腿长 ----
-                if key.char == 'w':
+                if key == keyboard.Key.up:
                     self.target["dot_s"] += self.step["dot_s"]
-                elif key.char == 's':
+                elif key == keyboard.Key.down:
                     self.target["dot_s"] -= self.step["dot_s"]
 
-                elif key.char == 'a':
+                elif key == keyboard.Key.left:
                     self.target["yaw"] += self.step["yaw"]
-                elif key.char == 'd':
+                elif key == keyboard.Key.right:
                     self.target["yaw"] -= self.step["yaw"]
 
         except AttributeError:
