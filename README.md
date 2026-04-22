@@ -1,4 +1,4 @@
-# Read sensors and send motor commands
+# Mujoco for Leg simulator
 
 Run `read_sensors.py` to read the sensors defined in `chuan.xml` and apply example motor commands.
 
@@ -14,7 +14,7 @@ pip install -r requirements.txt
 2. Run the script (headless):
 
 ```bash
-python3 read_sensors.py --xml chuan.xml --headless
+python3 LQR_six/controller.py
 ```
 
 The script prints sensor values periodically and sets a small sinusoidal command on actuators whose name contains `wheel`.
