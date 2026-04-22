@@ -56,3 +56,5 @@ class PID_control(object):
         self.output = (self.err - self.last_err) * self.kd
         self.output += self.err * self.kp
         self.integral += self.err * self.ki
+
+        return self.output 

@@ -48,14 +48,14 @@ class StateEstimator:
     
     def update(self, leg_L, leg_R, motor, imu):
         # --- wheel angle ---
-        theta_wl = motor["left_wheel"]
+        theta_wl = -motor["left_wheel"]
         theta_wr = motor["right_wheel"]
 
         dtheta_wl = self.disc_theta_wl.Diff(theta_wl)
         dtheta_wr = self.disc_theta_wr.Diff(theta_wr)
 
         # --- base velocity ---
-        dot_s_b = RADIUS_WHEEL * (dtheta_wl + dtheta_wr) / 2.0
+        dot_s_b = -RADIUS_WHEEL * (dtheta_wl + dtheta_wr) / 2.0
 
         # --- kinematic compensation ---
         dot_s = dot_s_b \

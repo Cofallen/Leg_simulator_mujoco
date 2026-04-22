@@ -9,7 +9,12 @@
     </asset>
 
     <default>
-         <joint damping="0.01"/>
+        <joint damping="0.1"/>
+
+        <default class="wheel">
+        <joint damping="0.1"/>
+        </default>
+
     </default>
     
     <worldbody>
@@ -17,7 +22,7 @@
         <light directional="true" dir="0 0 -1" diffuse="1 1 1" specular=".5 .5 .5"/>
         
         
-        <body name="body" pos="0 0 .3">
+        <body name="body" pos="0 0 .2">
         <freejoint/>
 
 
@@ -54,7 +59,7 @@
                     
                     <body name="wheel_L" pos="0.26742 0.01 -0.17936">
                         <geom type="cylinder" size="0.05 0.005" mass="0.5" euler="1.57 0 0"/>
-                        <joint type="hinge" name="joint_wheel_L" pos="0 0 0" axis="0 1 0"/>
+                        <joint type="hinge" name="joint_wheel_L" pos="0 0 0" axis="0 1 0" class="wheel"/>
                     </body>
 
                     </body>
@@ -104,7 +109,7 @@
                     
                     <body name="wheel_R" pos="0.26742 -0.01 -0.17936">
                         <geom type="cylinder" size="0.05 0.005" mass="0.5" euler="1.57 0 0"/>
-                        <joint type="hinge" name="joint_wheel_R" pos="0 0 0" axis="0 -1 0"/>
+                        <joint type="hinge" name="joint_wheel_R" pos="0 0 0" axis="0 -1 0" class="wheel"/>
                     </body>
 
                     </body>
@@ -139,12 +144,12 @@
     </equality>
 
     <actuator>
-        <motor name="left_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_L"/>
-        <motor name="left_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_L"/>
-        <motor name="left_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_L"/>
-        <motor name="right_front" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l1_R"/>
-        <motor name="right_back" ctrlrange="-3.14 3.14" forcerange="-10 10" joint="joint_l6_R"/>
-        <motor name="right_wheel" ctrlrange="-3.14 3.14" forcerange="-5 5" joint="joint_wheel_R"/>
+        <motor name="left_front" ctrlrange="-40 40" forcerange="-10 10" joint="joint_l1_L"/>
+        <motor name="left_back" ctrlrange="-40 40" forcerange="-10 10" joint="joint_l6_L"/>
+        <motor name="left_wheel" ctrlrange="-40 40" forcerange="-5 5" joint="joint_wheel_L"/>
+        <motor name="right_front" ctrlrange="-40 40" forcerange="-10 10" joint="joint_l1_R"/>
+        <motor name="right_back" ctrlrange="-40 40" forcerange="-10 10" joint="joint_l6_R"/>
+        <motor name="right_wheel" ctrlrange="-40 40" forcerange="-5 5" joint="joint_wheel_R"/>
     </actuator>
 
     <sensor>

@@ -2,6 +2,7 @@ import mujoco
 import mujoco.viewer
 import time
 
+from lqr_controller import LQRController
 from leg_data import Leg
 from get_sensor import RobotSensor
 from write_sensor import RobotController
@@ -23,6 +24,8 @@ leg_L = Leg(dt)
 leg_R = Leg(dt)
 vofa = VOFA()
 state_estimator = StateEstimator(dt)
+
+lqr = LQRController()
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     while viewer.is_running():
@@ -61,9 +64,25 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         state_estimator.update(leg_L, leg_R, motor, imu)
 
         # vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
-        # vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["phi"], leg_L.state["dphi"],)
-        vofa.send_command(leg_L.state["s"])
+        vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["s"], leg_L.state["phi"], leg_L.state["dphi"],)
+        # vofa.send_command(leg_L.state["s"], leg_R.state["s"], leg_L.state["dot_s"], leg_R.state["dot_s"])
 
+        # 左腿
+        tau_L, tau_w_L = lqr.control_left(leg_L, imu)
+
+        # 右腿
+        tau_R, tau_w_R = lqr.control_right(leg_R, imu)
+
+        # ---- 输出到MuJoCo ----
+        controller.set_actuator("left_front", -tau_L[0])
+        controller.set_actuator("left_back",  -tau_L[1])
+        controller.set_actuator("left_wheel", -tau_w_L)
+
+        controller.set_actuator("right_front", tau_R[0])
+        controller.set_actuator("right_back",  tau_R[1])
+        controller.set_actuator("right_wheel", tau_w_R)
+
+        
         # --- sync viewer ---
         viewer.sync()
 
