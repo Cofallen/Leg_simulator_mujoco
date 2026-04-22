@@ -7,6 +7,7 @@ from get_sensor import RobotSensor
 from write_sensor import RobotController
 from vmc import VMC
 from vofa import VOFA
+from get_state import StateEstimator
 
 model = mujoco.MjModel.from_xml_path("chuan.xml")
 data = mujoco.MjData(model)
@@ -21,6 +22,7 @@ vmc = VMC()
 leg_L = Leg(dt)
 leg_R = Leg(dt)
 vofa = VOFA()
+state_estimator = StateEstimator(dt)
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     while viewer.is_running():
@@ -37,7 +39,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         imu = {
             "acc": state["acc"],
-            "gyro": state["gyro"]
+            "gyro": state["gyro"],
+            "euler": state["euler"]
         }
 
         # 左腿
@@ -53,7 +56,14 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         vmc.update_left(leg_L, motor)
         vmc.update_right(leg_R, motor)
 
-        vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
+        state_estimator.update_left(leg_L, imu, dt)
+        state_estimator.update_right(leg_R, imu, dt)
+        state_estimator.update(leg_L, leg_R, motor, imu)
+
+        # vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
+        # vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["phi"], leg_L.state["dphi"],)
+        vofa.send_command(leg_L.state["s"])
+
         # --- sync viewer ---
         viewer.sync()
 

@@ -15,18 +15,19 @@ class Leg:
             "theta": 0.0,
             "dtheta": 0.0,
             "ddtheta": 0.0,
-            "x": 0.0,
-            "dx": 0.0,
+            "s": 0.0,
+            "dot_s": 0.0,
             "phi": 0.0,
             "dphi": 0.0,
+            "delta": 0.0,
         }
 
         # -------- target --------
         self.target = {
             "theta": 0.0,
             "dtheta": 0.0,
-            "x": 0.0,
-            "dx": 0.0,
+            "s": 0.0,
+            "dot_s": 0.0,
             "phi": 0.0,
             "dphi": 0.0,
             "l0": 0.3,
