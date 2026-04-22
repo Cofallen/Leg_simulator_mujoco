@@ -28,7 +28,7 @@ class LQRController:
         self.pid_l0_s = PID_control(3000, 0, 1000, 0.15)
 
         self.pid_roll = PID_control(0, 0, 0, 0)
-        self.pid_delta = PID_control(0, 0, 0, 0)
+        self.pid_delta = PID_control(100, 0, 0, 0)
         self.pid_yaw = PID_control(10, 0, 0, 0)
 
     # -----------------------
@@ -92,12 +92,12 @@ class LQRController:
         F_0 = (
             MASS_BODY / 2.0 * GRAVITY / np.cos(theta)
             + dF_0
-            # + dF_roll
+            # - dF_roll
         )
         
         # ---- 修正 ----
-        T_p = T_p
-        T_w = T_w
+        T_p = T_p + dF_delta
+        T_w = T_w + dF_yaw
 
         # ---- 力 -> 关节 ----
         J = leg.vmc["J"]
@@ -138,8 +138,8 @@ class LQRController:
         )
 
         # 注意符号（关键区别）
-        T_p = T_p
-        T_w = T_w
+        T_p = T_p - dF_delta
+        T_w = T_w - dF_yaw
 
         J = leg.vmc["J"]
 

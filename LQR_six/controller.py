@@ -9,6 +9,7 @@ from write_sensor import RobotController
 from vmc import VMC
 from vofa import VOFA
 from get_state import StateEstimator
+from keyboardInput import KeyboardInput
 
 model = mujoco.MjModel.from_xml_path("chuan.xml")
 data = mujoco.MjData(model)
@@ -24,6 +25,7 @@ leg_L = Leg(dt)
 leg_R = Leg(dt)
 vofa = VOFA()
 state_estimator = StateEstimator(dt)
+kb = KeyboardInput()
 
 lqr = LQRController()
 
@@ -82,7 +84,13 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         controller.set_actuator("right_back",  tau_R[1])
         controller.set_actuator("right_wheel", tau_w_R)
 
-        
+        target = kb.get_target()
+
+        leg_L.target["dot_s"] = target["dot_s"]
+        leg_R.target["dot_s"] = target["dot_s"]
+        leg_L.target["yaw"] = target["yaw"]
+        leg_R.target["yaw"] = target["yaw"]
+
         # --- sync viewer ---
         viewer.sync()
 

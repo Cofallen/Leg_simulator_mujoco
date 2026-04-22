@@ -30,7 +30,7 @@ class Leg:
             "dot_s": 0.0,
             "phi": 0.0,
             "dphi": 0.0,
-            "l0": 0.15,
+            "l0": 0.25,
             "roll": 0.0,
             "yaw": 0.0,
             "d2theta": 0.0
