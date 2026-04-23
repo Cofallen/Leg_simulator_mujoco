@@ -93,6 +93,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
     
         leg_L.target["yaw"] = target["yaw"]
         leg_R.target["yaw"] = target["yaw"]
+        leg_L.target["l0"] = target["l0"]
+        leg_R.target["l0"] = target["l0"]
 
         # --- sync viewer ---
         viewer.sync()

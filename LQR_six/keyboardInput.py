@@ -13,11 +13,13 @@ class KeyboardInput:
             "dot_s": 0.0,
             "phi": 0.0,
             "yaw": 0.0,
+            "l0": 0.25,
         }
 
         self.step = {
             "dot_s": 1.0,
             "yaw": 0.05,
+            "l0": 0.0003,
         }
 
         self.pressed = set()
@@ -49,9 +51,11 @@ class KeyboardInput:
             self.target["s"] = self.disc_s.Sum(self.target["dot_s"])
 
             if keyboard.Key.left in self.pressed:
-                self.target["yaw"] += self.step["yaw"]
+                # self.target["yaw"] += self.step["yaw"]
+                self.target["l0"] -= self.step["l0"]
             if keyboard.Key.right in self.pressed:
-                self.target["yaw"] -= self.step["yaw"]
+                # self.target["yaw"] -= self.step["yaw"]
+                self.target["l0"] += self.step["l0"]
 
     def get_target(self):
         with self.lock:
