@@ -25,7 +25,7 @@ leg_L = Leg(dt)
 leg_R = Leg(dt)
 vofa = VOFA()
 state_estimator = StateEstimator(dt)
-kb = KeyboardInput()
+kb = KeyboardInput(dt)
 
 lqr = LQRController()
 
@@ -67,7 +67,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
         # vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["s"], leg_L.state["phi"], leg_L.state["dphi"],)
-        vofa.send_command(leg_L.state["phi"], leg_L.target["phi"])
+        vofa.send_command(leg_L.state["phi"], leg_L.state["dphi"], leg_L.state["s"], leg_L.state["dot_s"], leg_L.target["s"], leg_L.target["dot_s"])
 
         # 左腿
         tau_L, tau_w_L = lqr.control_left(leg_L, imu)
@@ -85,9 +85,12 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         controller.set_actuator("right_wheel", tau_w_R)
 
         target = kb.get_target()
-
+        kb.update()
         leg_L.target["dot_s"] = target["dot_s"]
         leg_R.target["dot_s"] = target["dot_s"]
+        leg_L.target["s"] = target["s"]
+        leg_R.target["s"] = target["s"]
+    
         leg_L.target["yaw"] = target["yaw"]
         leg_R.target["yaw"] = target["yaw"]
 

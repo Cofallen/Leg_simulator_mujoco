@@ -5,7 +5,7 @@ from mymath import PID_control
 MASS_BODY = 10.0
 GRAVITY = 9.81
 
-MAX_TORQUE_LEG_T = 20.0
+MAX_TORQUE_LEG_T = 40.0
 MAX_TORQUE_LEG_W = 100.0
 
 import vofa
