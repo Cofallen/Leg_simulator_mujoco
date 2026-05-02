@@ -125,86 +125,68 @@ def get_k(leg_length):
     try:
         P_sol = scipy.linalg.solve_continuous_are(A_num, B_num, Q, R_mat)
         K = np.linalg.inv(R_mat) @ B_num.T @ P_sol
-        return np.matrix(K)
+        return A_num, B_num, np.array(K)
     except Exception as e:
         print(f"LQR Solver Error: {e}")
-        return None
+        return None, None, None
 
+def polyfit_matrix(x, Y, order):
+    return [np.polyfit(x, Y[:, i], order) for i in range(Y.shape[1])]
 
-# 把k矩阵输出成c数组K[12]，通过端口发送到串口上
-def send_k(COM):
-    # serial_port = serial.Serial(COM, baudrate=115200)
-    data = get_k(0.14 )
-    if data is not None:
-        flat_data = np.array(data).flatten()
-        c_str = ", ".join([f"{x:.8f}" for x in flat_data])
-        print(f"float K[{len(flat_data)}] = {{ {c_str}}};\n")
-        header = b'\xCD'
-        tail   = b'\xDC'
-        data = struct.pack('<' + 'f' * len(flat_data), *flat_data)
-        packet = header + data + tail
-        # serial_port.write(packet)
-        # serial_port.close()
-
-# 拟合k矩阵 0.08-0.17 步长0.005
-def fit_k():
+def fit_ABK():
     leg_lengths = np.arange(0.12, 0.36, 0.005)
-    k_values = []
+
+    A_all, B_all, K_all = [], [], []
+
     for ll in leg_lengths:
-        print('solve: ',float(ll))
-        K = get_k(float(ll))
-        k_values.append(np.array(K).flatten())
-    k_values = np.array(k_values)
-    k11 = k_values[:, 0]
-    k12 = k_values[:, 1]
-    k13 = k_values[:, 2]
-    k14 = k_values[:, 3]
-    k15 = k_values[:, 4]
-    k16 = k_values[:, 5]
-    k21 = k_values[:, 6]
-    k22 = k_values[:, 7]
-    k23 = k_values[:, 8]
-    k24 = k_values[:, 9]
-    k25 = k_values[:, 10]
-    k26 = k_values[:, 11]
-    
-    a11 = np.polyfit(leg_lengths, k11, 3)
-    a12 = np.polyfit(leg_lengths, k12, 3)
-    a13 = np.polyfit(leg_lengths, k13, 3)
-    a14 = np.polyfit(leg_lengths, k14, 3)
-    a15 = np.polyfit(leg_lengths, k15, 3)
-    a16 = np.polyfit(leg_lengths, k16, 3)
-    a21 = np.polyfit(leg_lengths, k21, 3)
-    a22 = np.polyfit(leg_lengths, k22, 3)
-    a23 = np.polyfit(leg_lengths, k23, 3)
-    a24 = np.polyfit(leg_lengths, k24, 3)
-    a25 = np.polyfit(leg_lengths, k25, 3)
-    a26 = np.polyfit(leg_lengths, k26, 3)
-    
-    # 输出c语言格式 ChassisL_LQR_K_coeffs[12][4]
-    print("float ChassisL_LQR_K_coeffs[12][4] = {")
-    for a in [a11, a12, a13, a14, a15, a16, a21, a22, a23, a24, a25, a26]:
-        coeff_str = ", ".join([f"{coef:.8f}" for coef in a])
-        print(f"    {{ {coeff_str} }},")
+        print("solve:", float(ll))
+        A, B, K = get_k(float(ll))
+
+        if A is None:
+            continue
+
+        A_all.append(A.flatten())
+        B_all.append(B.flatten())
+        K_all.append(K.flatten())
+
+    A_all = np.array(A_all)   # (N, 36)
+    B_all = np.array(B_all)   # (N, 12)
+    K_all = np.array(K_all)   # (N, 12)
+
+    order = 3
+
+    A_coeffs = polyfit_matrix(leg_lengths, A_all, order)
+    B_coeffs = polyfit_matrix(leg_lengths, B_all, order)
+    K_coeffs = polyfit_matrix(leg_lengths, K_all, order)
+
+    return A_coeffs, B_coeffs, K_coeffs
+
+def export_matrix(name, coeffs):
+    print(f"float {name}[{len(coeffs)}][4] = {{")
+    for c in coeffs:
+        print("    { " + ", ".join(f"{x:.8f}" for x in c) + " },")
     print("};\n")
+
+
+def export_all(Ac, Bc, Kc):
+    export_matrix("A_coeffs", Ac)
+    export_matrix("B_coeffs", Bc)
+    export_matrix("K_coeffs", Kc)
     
-    return (a11, a12, a13, a14, a15, a16, a21, a22, a23, a24, a25, a26)
-    
-if __name__ == "__main__":
-    data = get_k(0.15)
-    # print(data)
-    # data .8f np
-    print("self.K = np.array([")
-    for row in data:
-        row_str = ", ".join([f"{elem:.8f}" for elem in row.flat])
+def print_matrix(name, mat):
+    print(f"self.{name} = np.array([")
+    for row in mat:
+        row_str = ", ".join([f"{float(x):.8f}" for x in row])
         print(f"    [{row_str}],")
     print("])\n")
+    
+    
+if __name__ == "__main__":
+    leg_len = 0.15   # 你想要的腿长
 
-    # if data is not None:
-    #     # 将矩阵展平为一维数组
-    #     flat_data = np.array(data).flatten()
-    #     # 格式化为 C 语言数组字符串，保留8位小数
-    #     c_str = ", ".join([f"{x:.8f}" for x in flat_data])
-    #     print(f"float K[{len(flat_data)}] = {{ {c_str} }};\n")
-    # send_k('COM36')
-    # coeffs = fit_k()
+    A, B, K = get_k(leg_len)
+
+    if A is not None:
+        print_matrix("A", A)
+        print_matrix("B", B)
+        print_matrix("K", K)
