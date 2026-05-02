@@ -89,8 +89,8 @@ class LQRController:
         err = x - x_ref
         
         ud = self.B_i @ self.A @ (x_ref_dot -x_ref)  # 仅x_ref_dot[1,5]使得ud不为0，但是没有意义
-        u = self.K @ err + ud  # (2,)   
-        print(ud[0], ud[1])
+        u = self.K @ err   
+        
         T_w = (u[0])
         T_p = (u[1])
 
