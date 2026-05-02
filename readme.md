@@ -1,23 +1,20 @@
-# Mujoco leg simulator
+# Mujoco for Leg simulator
 
-## Model 
+Run `read_sensors.py` to read the sensors defined in `chuan.xml` and apply example motor commands.
 
-The model is created with 2 leg and a box. Right leg is copied from left leg. Pay attention of the pos of the body.
+Quick start:
 
-To put the same rotational pos in different motors, as well as to set the same to real object, the axis of right leg is changed into -1.
+1. Install dependencies (choose the proper MuJoCo binding for your setup):
 
-The mass of legs and objects is near to real object.  
+```bash
+pip install -r requirements.txt
+# Or install the upstream mujoco package following its install docs
+```
 
-All sensor data is about imu and joint position. Among them, the framequat data, by the way, the imu data, is quat propertion, you should change it into euler degree.
+2. Run the script (headless):
 
-The equality is created by two site model. Because of recriction of equality is not enough, you could set `solref` to strenghen connection.
+```bash
+python3 LQR_six/controller.py
+```
 
-### Data detail
-
-motor positive direction: countercloc kwise. (inverse: clockwise)
-
-motor zero position: level of the legs
-
-### Param
-
-Notice these parameters: mass, damping, ctrlrange. 
+The script prints sensor values periodically and sets a small sinusoidal command on actuators whose name contains `wheel`.
