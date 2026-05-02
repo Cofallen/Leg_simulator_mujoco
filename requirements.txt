@@ -2,3 +2,4 @@ mujoco
 # optional fallback
 mujoco-py
 numpy
+pynput
