@@ -1,5 +1,6 @@
 import numpy as np
 from mymath import PID_control
+from mympc import MPCController
 
 # -------- 常量（按你实际填）--------
 MASS_BODY = 10.0
@@ -45,7 +46,7 @@ class LQRController:
         #     [0, 0, 0, 0, 0, 0],
         # ])  # --- IGNORE ---
 
-
+        self.mpc = MPCController(self.A, self.B, N=30, dt=0.01)
         # -------- PID --------
         self.pid_l0_p = PID_control(3000, 0, 1000, 0.15)
         self.pid_l0_s = PID_control(3000, 0, 1000, 0.15)
@@ -77,22 +78,41 @@ class LQRController:
             leg.target.get("phi", 0),
             leg.target.get("dphi", 0)
         ])
-
-        x_ref_dot = np.array([
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ])
+        
         err = x - x_ref
         
-        ud = self.B_i @ self.A @ (x_ref_dot -x_ref)  # 仅x_ref_dot[1,5]使得ud不为0，但是没有意义
         u = self.K @ err   
         
         T_w = (u[0])
         T_p = (u[1])
+
+        return T_w, T_p
+    
+    def compute_mpc(self, leg):
+        s = leg.state
+
+        x = np.array([
+            s["theta"],
+            s["dtheta"],
+            s["s"],
+            s["dot_s"],
+            s["phi"],
+            s["dphi"]
+        ])
+
+        x_ref = np.array([
+            leg.target.get("theta", 0),
+            leg.target.get("dtheta", 0),
+            leg.target.get("s", 0),
+            leg.target.get("dot_s", 0),
+            leg.target.get("phi", 0),
+            leg.target.get("dphi", 0)
+        ])
+
+        u = -self.mpc.solve(x, x_ref) # 注意符号
+
+        T_w = u[0]
+        T_p = u[1]
 
         return T_w, T_p
 
@@ -101,7 +121,7 @@ class LQRController:
     # -----------------------
     def control_left(self, leg, imu):
         # ---- LQR ----
-        T_w, T_p = self.compute_lqr(leg)
+        T_w, T_p = self.compute_mpc(leg)
 
         # ---- PID: 支撑力 ----
         F0_p = self.pid_l0_p.position_pid(leg.target["l0"], leg.vmc["L0"])
@@ -148,7 +168,7 @@ class LQRController:
     # 右腿控制（符号不同！）
     # -----------------------
     def control_right(self, leg, imu):
-        T_w, T_p = self.compute_lqr(leg)
+        T_w, T_p = self.compute_mpc(leg)
 
         F0_p = self.pid_l0_p.position_pid(leg.target["l0"], leg.vmc["L0"])
         # F0_s = self.pid_l0_s.position_pid(F0_p, leg.vmc["L0_dot"])
