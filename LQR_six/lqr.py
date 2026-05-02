@@ -190,3 +190,4 @@ if __name__ == "__main__":
         print_matrix("A", A)
         print_matrix("B", B)
         print_matrix("K", K)
+        print_matrix("B_i", np.linalg.pinv(B))

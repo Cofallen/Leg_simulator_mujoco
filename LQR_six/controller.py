@@ -67,7 +67,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
         # vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["s"], leg_L.state["phi"], leg_L.state["dphi"],)
-        vofa.send_command(leg_L.state["phi"], leg_L.state["dphi"], leg_L.state["s"], leg_L.state["dot_s"], leg_L.target["s"], leg_L.target["dot_s"])
+        vofa.send_command(leg_L.state["phi"], leg_L.state["dphi"], leg_L.state["s"], leg_L.state["dot_s"], leg_L.state["theta"], leg_L.state["dtheta"])
 
         # 左腿
         tau_L, tau_w_L = lqr.control_left(leg_L, imu)
