@@ -80,11 +80,12 @@ class LQRController:
         ])
         
         err = x - x_ref
-        # alpha = 1
-        # if abs(err[0]) < 0.1:
-        #     alpha = (err[0]) * 3.0 + 0.1
-        u_mpc = -self.mpc.solve(err, np.zeros_like(err))
-        u = self.K @ err  
+        
+        d_hat = np.zeros(2)
+        # u = self.mpc.solve(x, d_hat, x_ref)
+        
+        u_mpc = -self.mpc.solve(x, d_hat, x_ref)
+        u = self.K @ err + 0.0 * u_mpc
         # u = self.K @ err   
         print(u_mpc[0], u_mpc[1])
         T_w = (u[0])

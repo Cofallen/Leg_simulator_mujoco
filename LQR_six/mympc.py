@@ -23,24 +23,43 @@ class MPCController:
         self.A, self.B = c2d(A, B, dt)   # ✅ 必须离散化
         self.N = N
         self.dt = dt
-
-        self.nx = A.shape[0]
+        
+        self.nd = 2  # 扰动维度
+        
+        # self.nx = A.shape[0]
         self.nu = B.shape[1]
-
+        self.nx_orig = A.shape[0]
+        self.nx = self.nx_orig + self.nd
+        
         # -------- 稳定优先参数 --------
-        self.Q = np.diag([10000, 1000, 100, 5, 100, 5])
-        self.R = np.diag([1, 10])
+        self.Q = np.diag([1000, 10, 1000, 5, 1000, 5])
+        self.R = np.diag([1, 1])
         self.Rd = np.diag([1, 1])
 
         self.u_min = np.array([-100, -100])
         self.u_max = np.array([100, 100])
-
+        
+        self.A_aug = np.block([
+            [self.A, np.eye(self.nx_orig, self.nd)],
+            [np.zeros((self.nd, self.nx_orig)), np.eye(self.nd)]
+        ])
+        
+        self.B_aug = np.block([
+            [self.B],
+            [np.zeros((self.nd, self.nu))]
+        ])
+        
+        self.E_aug = np.block([
+            [np.eye(self.nx, self.nd)],
+            [np.eye(self.nd)]
+        ])
+        
         self._build_prediction_matrices()
 
     # -----------------------------
     def _build_prediction_matrices(self):
-        A, B, N = self.A, self.B, self.N
-        nx, nu = self.nx, self.nu
+        A, B, N = self.A_aug, self.B_aug, self.N
+        nx, nu = self.nx_orig + self.nd, self.nu
 
         A_bar = np.zeros((nx * N, nx))
         B_bar = np.zeros((nx * N, nu * N))
@@ -58,9 +77,12 @@ class MPCController:
         self.B_bar = B_bar
 
         # -------- Terminal cost --------
-        P = scipy.linalg.solve_discrete_are(A, B, self.Q, self.R)
+        Q_aug = np.block([
+            [self.Q, np.zeros((self.nx_orig, self.nd))],
+            [np.zeros((self.nd, self.nx_orig)), np.eye(self.nd) * 10]
+        ])
 
-        Q_list = [self.Q] * (N - 1) + [P]
+        Q_list = [Q_aug] * N
         Q_bar = scipy.linalg.block_diag(*Q_list)
         R_bar = scipy.linalg.block_diag(*([self.R] * N))
 
@@ -78,13 +100,16 @@ class MPCController:
         self.Q_bar = Q_bar
 
     # -----------------------------
-    def solve(self, x0, x_ref=None):
+    def solve(self, x0, d_hat, x_ref=None):
         if x_ref is None:
             x_ref = np.zeros(self.nx)
 
-        x_ref_bar = np.tile(x_ref, self.N)
+        x0_aug = np.concatenate([x0, d_hat])
+        x_ref_aug = np.concatenate([x_ref, d_hat])
 
-        e = self.A_bar @ x0 - x_ref_bar
+        x_ref_bar = np.tile(x_ref_aug, self.N)
+        e = self.A_bar @ x0_aug - x_ref_bar
+        
         f = self.B_bar.T @ self.Q_bar @ e
 
         try:
