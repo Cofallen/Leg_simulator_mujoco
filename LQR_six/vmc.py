@@ -1,6 +1,7 @@
 import numpy as np
 
 
+
 class VMC:
     def __init__(self):
         # ---- geometry ----
@@ -9,7 +10,9 @@ class VMC:
         self.l3 = 0.258
         self.l4 = 0.215
         self.l5 = 0.0
-
+        
+        self.g = 9.81
+        self.MASS_WHEEL = 1.0
     # ---------------------------
     # kinematics
     # ---------------------------
@@ -129,3 +132,34 @@ class VMC:
         leg.vmc["L0_ddot"] = L0_ddot
 
         leg.vmc["J"] = J
+        
+        
+    def getFnL(self, leg, imu):
+        theta = leg.state["theta"]
+        dtheta = leg.state["dtheta"]
+
+        # ---- 直接使用原始量 ----
+        L0 = leg.vmc["L0"]
+        L0_dot = leg.vmc["L0_dot"]
+        L0_ddot = leg.vmc["L0_ddot"]
+
+        acc_z = imu["acc"][2]
+
+        # ---- P 项 ----
+        P = (
+            leg.LQR["F_0"] * np.cos(theta)
+            + leg.LQR["T_p"] * np.sin(theta) / (L0 + 1e-6)
+        )
+
+        # ---- ddz_w ----
+        ddz_w = (
+            (acc_z - self.g)
+            - L0_ddot * np.cos(theta)
+            + 2.0 * L0_dot * dtheta * np.sin(theta)
+            + L0 * (dtheta ** 2) * np.cos(theta)
+        )
+
+        # ---- Fn ----
+        leg.LQR["Fn"] = P + self.MASS_WHEEL * self.g + self.MASS_WHEEL * ddz_w
+
+        return leg.LQR["Fn"]

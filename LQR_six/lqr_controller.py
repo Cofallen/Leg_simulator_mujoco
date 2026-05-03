@@ -55,6 +55,10 @@ class LQRController:
         self.pid_delta = PID_control(10, 0, 0, 0)
         self.pid_yaw = PID_control(10, 0, 0, 0)
 
+        # 在 __init__ 末尾加
+        self.x_prev = np.zeros(6)
+        self.u_prev = np.zeros(2)
+        
     # -----------------------
     # 通用LQR计算
     # -----------------------
@@ -80,14 +84,22 @@ class LQRController:
         ])
         
         err = x - x_ref
-        
-        d_hat = np.zeros(2)
-        # u = self.mpc.solve(x, d_hat, x_ref)
-        
+
+        u_lqr = self.K @ err
+        x_pred = self.A @ self.x_prev + self.B @ self.u_prev
+        e_model = x - x_pred
+        d_hat = np.array([
+            e_model[1],   # dtheta误差
+            e_model[3]    # dot_s误差
+        ]) * 0.001  # ⚠️ 这个系数后面调
         u_mpc = -self.mpc.solve(x, d_hat, x_ref)
-        u = self.K @ err + 0.0 * u_mpc
+        u = u_lqr + 0.2 * u_mpc
+
+        self.x_prev = x.copy()
+        self.u_prev = u.copy()
+
         # u = self.K @ err   
-        print(u_mpc[0], u_mpc[1])
+        # print(u_mpc[0], u_mpc[1])
         T_w = (u[0])
         T_p = (u[1])
 
@@ -166,6 +178,8 @@ class LQRController:
         tau[0] = np.clip(tau[0], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau[1] = np.clip(tau[1], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau_w = np.clip(tau_w, -MAX_TORQUE_LEG_W, MAX_TORQUE_LEG_W)
+        
+        leg.LQR["F_0"] = F_0
 
         return tau, tau_w
 
@@ -206,5 +220,7 @@ class LQRController:
         tau[0] = np.clip(tau[0], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau[1] = np.clip(tau[1], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau_w = np.clip(tau_w, -MAX_TORQUE_LEG_W, MAX_TORQUE_LEG_W)
+        
+        leg.LQR["F_0"] = F_0
 
         return tau, tau_w

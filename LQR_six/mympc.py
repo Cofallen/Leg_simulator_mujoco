@@ -32,7 +32,7 @@ class MPCController:
         self.nx = self.nx_orig + self.nd
         
         # -------- 稳定优先参数 --------
-        self.Q = np.diag([1000, 10, 1000, 5, 1000, 5])
+        self.Q = np.diag([10, 100, 10, 1000, 100, 5])
         self.R = np.diag([1, 1])
         self.Rd = np.diag([1, 1])
 
