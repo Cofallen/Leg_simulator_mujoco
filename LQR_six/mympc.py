@@ -28,8 +28,8 @@ class MPCController:
         self.nu = B.shape[1]
 
         # -------- 稳定优先参数 --------
-        self.Q = np.diag([3000, 5, 500, 5, 20000, 5])
-        self.R = np.diag([1, 1])
+        self.Q = np.diag([10000, 1000, 100, 5, 100, 5])
+        self.R = np.diag([1, 10])
         self.Rd = np.diag([1, 1])
 
         self.u_min = np.array([-100, -100])

@@ -17,6 +17,9 @@ def get_k_solve(L0_l, L0_r, theta, phi, R1, l1, mw1, mp1, M1, Iw1, Ip1, IM1):
     LM1 = L0_l / 2 
     pass
 
+def delta_L(m1, m2):
+    return (0.02311*m1 + 0.07949*m2) / (0.336*(m1 + m2)) - 0.1678
+
 def get_k(leg_length):
     # 1. 定义符号变量
     t = sp.symbols('t')
@@ -34,8 +37,8 @@ def get_k(leg_length):
 
     # 2. 物理参数 (直接定义为数值，不再用符号)
     R_val = 0.05
-    L_val = leg_length / 2.0
-    L_M_val = leg_length / 2.0
+    L_val = leg_length / 2.0 - delta_L(0.3093, 0.2974)
+    L_M_val = leg_length / 2.0 + delta_L(0.3093, 0.2974)
     Body_val = 0.574
     l_val = 0.028
     m_w_val = 0.572
