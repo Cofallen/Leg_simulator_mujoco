@@ -162,6 +162,9 @@ class LQRController:
         tau[1] = np.clip(tau[1], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau_w = np.clip(tau_w, -MAX_TORQUE_LEG_W, MAX_TORQUE_LEG_W)
 
+        leg.LQR["F_0"] = F_0
+        leg.LQR["T_p"] = T_p
+        
         return tau, tau_w
 
     # -----------------------
@@ -202,4 +205,7 @@ class LQRController:
         tau[1] = np.clip(tau[1], -MAX_TORQUE_LEG_T, MAX_TORQUE_LEG_T)
         tau_w = np.clip(tau_w, -MAX_TORQUE_LEG_W, MAX_TORQUE_LEG_W)
 
+        leg.LQR["F_0"] = F_0
+        leg.LQR["T_p"] = T_p
+        
         return tau, tau_w

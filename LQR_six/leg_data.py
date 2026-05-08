@@ -57,6 +57,7 @@ class Leg:
             "F_0": 0.0,
             "torque_leg": np.zeros(2),
             "torque_wheel": 0.0,
+            "Fn": 0.0,
         }
 
         # -------- PID --------

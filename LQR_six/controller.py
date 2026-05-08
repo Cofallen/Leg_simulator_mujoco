@@ -60,15 +60,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         vmc.update_left(leg_L, motor)
         vmc.update_right(leg_R, motor)
-
+        vmc.get_Fn(leg_L, imu)
+        vmc.get_Fn(leg_R, imu)
         state_estimator.update_left(leg_L, imu, dt)
         state_estimator.update_right(leg_R, imu, dt)
         state_estimator.update(leg_L, leg_R, motor, imu)
 
         # vofa.send_command(leg_L.vmc["L0"],leg_R.vmc["L0"])
         # vofa.send_command(leg_L.state["theta"], leg_L.state["dtheta"] ,leg_L.state["s"], leg_L.state["phi"], leg_L.state["dphi"],)
-        vofa.send_command(leg_L.state["phi"], leg_L.state["dphi"], leg_L.state["s"], leg_L.state["dot_s"], leg_L.state["theta"], leg_L.state["dtheta"])
-
+        # vofa.send_command(leg_L.state["phi"], leg_L.state["dphi"], leg_L.state["s"], leg_L.state["dot_s"], leg_L.state["theta"], leg_L.state["dtheta"])
+        # vofa.send_command(leg_L.LQR["F_0"])
         # 左腿
         tau_L, tau_w_L = lqr.control_left(leg_L, imu)
 
