@@ -10,6 +10,8 @@ from vmc import VMC
 from vofa import VOFA
 from get_state import StateEstimator
 from keyboardInput import KeyboardInput
+from mpcTraj import TrajMPC
+import numpy as np
 
 model = mujoco.MjModel.from_xml_path("chuan.xml")
 data = mujoco.MjData(model)
@@ -28,6 +30,7 @@ state_estimator = StateEstimator(dt)
 kb = KeyboardInput(dt)
 
 lqr = LQRController()
+mpc = TrajMPC()
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     while viewer.is_running():
@@ -87,13 +90,24 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         target = kb.get_target()
         kb.update()
-        leg_L.target["dot_s"] = target["dot_s"]
-        leg_R.target["dot_s"] = target["dot_s"]
-        leg_L.target["s"] = target["s"]
-        leg_R.target["s"] = target["s"]
+        
+        x = state["pos"]
+        print(x)
+        x = x[0:3]
+        x_ref = np.array([
+            1.0,
+            1.0,
+            0.0
+        ])
+        v, w = mpc.solve(x, x_ref)
+        
+        leg_L.target["dot_s"] = v
+        leg_R.target["dot_s"] = v
+        leg_L.target["s"] += v * 0.002
+        leg_R.target["s"] += v * 0.002
     
-        leg_L.target["yaw"] = target["yaw"]
-        leg_R.target["yaw"] = target["yaw"]
+        leg_L.target["yaw"] = w
+        leg_R.target["yaw"] = w
         leg_L.target["l0"] = target["l0"]
         leg_R.target["l0"] = target["l0"]
 

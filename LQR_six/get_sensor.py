@@ -49,6 +49,7 @@ class RobotSensor:
             "gyro": self.get_gyro(),
             "joints": self.get_joint_positions(),
             "euler": self.quat_to_euler(self.get_orientation_quat()),
+            "pos": [*self.data.qpos[:2], self.quat_to_euler(self.get_orientation_quat())[2]]
         }
 
     # ---------------------------

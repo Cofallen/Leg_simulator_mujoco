@@ -48,12 +48,12 @@ class LQRController:
 
         self.mpc = MPCController(self.A, self.B, N=30, dt=0.01)
         # -------- PID --------
-        self.pid_l0_p = PID_control(3000, 0, 1000, 0.15)
-        self.pid_l0_s = PID_control(3000, 0, 1000, 0.15)
+        self.pid_l0_p = PID_control(6000, 0, 10000, 0.15)
+        self.pid_l0_s = PID_control(6000, 0, 10000, 0.15)
 
         self.pid_roll = PID_control(0, 0, 0, 0)
-        self.pid_delta = PID_control(10, 0, 0, 0)
-        self.pid_yaw = PID_control(10, 0, 0, 0)
+        self.pid_delta = PID_control(200, 0, 100, 0)
+        self.pid_yaw = PID_control(10, 0, 100, 0)
 
     # -----------------------
     # 通用LQR计算
@@ -121,7 +121,7 @@ class LQRController:
     # -----------------------
     def control_left(self, leg, imu):
         # ---- LQR ----
-        T_w, T_p = self.compute_mpc(leg)
+        T_w, T_p = self.compute_lqr(leg)
 
         # ---- PID: 支撑力 ----
         F0_p = self.pid_l0_p.position_pid(leg.target["l0"], leg.vmc["L0"])
@@ -136,7 +136,7 @@ class LQRController:
         dF_delta = self.pid_delta.position_pid(leg.target["d2theta"], leg.state["delta"])
 
         # ---- Yaw ----
-        dF_yaw = self.pid_yaw.position_pid(leg.target["yaw"], imu["euler"][2])
+        dF_yaw = self.pid_yaw.position_pid(leg.target["yaw"], imu["gyro"][2])
 
         # ---- F0 ----
         theta = leg.state["theta"]
@@ -171,7 +171,7 @@ class LQRController:
     # 右腿控制（符号不同！）
     # -----------------------
     def control_right(self, leg, imu):
-        T_w, T_p = self.compute_mpc(leg)
+        T_w, T_p = self.compute_lqr(leg)
 
         F0_p = self.pid_l0_p.position_pid(leg.target["l0"], leg.vmc["L0"])
         # F0_s = self.pid_l0_s.position_pid(F0_p, leg.vmc["L0_dot"])
@@ -182,7 +182,7 @@ class LQRController:
         dF_roll = -self.pid_roll.position_pid(leg.target["roll"], imu["euler"][0])
 
         dF_delta = self.pid_delta.position_pid(leg.target["d2theta"], leg.state["delta"])
-        dF_yaw = self.pid_yaw.position_pid(leg.target["yaw"], imu["euler"][2])
+        dF_yaw = self.pid_yaw.position_pid(leg.target["yaw"], imu["gyro"][2])
 
         theta = leg.state["theta"]
 
